@@ -41,16 +41,17 @@ class DigitDataset(Dataset):
             for image_file in os.listdir(label_dir):
                 if image_file.endswith('.png'):
                     image_path = os.path.join(label_dir, image_file)
+                    #灰度处理，减少计算量
                     image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
 
                     if image is None:
                         continue
 
-                    # 确保图像是28x28
+                    # 确保图像是28x28，便于神经网络处理
                     if image.shape != (28, 28):
                         image = cv2.resize(image, (28, 28))
 
-                    # 归一化像素值并转换为float32
+                    # 归一化像素值并转换为float32，加快收敛
                     image = image.astype(np.float32) / 255.0
 
                     self.images.append(image)
@@ -81,6 +82,7 @@ def get_data_loaders(batch_size=32, test_size=0.2):
     train_dataset = DigitDataset(train=True, test_size=test_size)
     test_dataset = DigitDataset(train=False, test_size=test_size)
 
+    #避免模型记忆顺序
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
