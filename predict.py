@@ -20,7 +20,7 @@ def predict_random_samples(model, test_loader, num_samples=5):
         images, labels = images.to(device), labels.to(device)
         outputs = model(images)
         _, predicted = torch.max(outputs, 1)
-        probabilities = torch.softmax(outputs, dim=1)
+        probabilities = torch.softmax(outputs, dim=1)  # softmax转变为概率分数
 
     # 显示结果
     plt.figure(figsize=(15, 3))
